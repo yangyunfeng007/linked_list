@@ -107,8 +107,8 @@ FIND:
 		return false
 	}
 	a.mu.Lock()
-	// Step2: For a.next may changed in another thread, double check a.next is still b
-	if a.loadNext() != b {
+	// Step2: Check a is not deleted and a.next is stll b.
+	if !a.flags.Get(marked) || a.loadNext() != b {
 		a.mu.Unlock()
 		goto FIND
 	}
